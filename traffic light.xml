@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+bool activated;
+chan enter,ready,finish;
+clock x,y;</declaration>
+	<template>
+		<name x="5" y="5">Template</name>
+		<declaration>// Place local declarations here.
+clock y;</declaration>
+		<location id="id0" x="-59" y="68">
+		</location>
+		<location id="id1" x="-357" y="76">
+			<name x="-367" y="42">Red</name>
+			<label kind="invariant" x="-367" y="93">y&lt;=25</label>
+		</location>
+		<location id="id2" x="-187" y="-178">
+			<name x="-197" y="-212">Yellow</name>
+			<label kind="invariant" x="-197" y="-161">y&lt;=5</label>
+		</location>
+		<location id="id3" x="-569" y="-170">
+			<name x="-579" y="-204">Green</name>
+			<label kind="invariant" x="-620" y="-195">y&lt;=20</label>
+		</location>
+		<init ref="id3"/>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-263" y="119">enter?</label>
+			<label kind="assignment" x="-153" y="102">y=0</label>
+			<nail x="-195" y="136"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-246" y="-85">y&gt;=5</label>
+			<label kind="synchronisation" x="-246" y="-42">ready?</label>
+			<nail x="-196" y="-50"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-144" y="-238">enter?</label>
+			<label kind="assignment" x="-127" y="-204">y=0</label>
+			<nail x="-144" y="-246"/>
+			<nail x="-93" y="-204"/>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-501" y="-297">enter?</label>
+			<label kind="assignment" x="-425" y="-263">y=0</label>
+			<nail x="-484" y="-280"/>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-586" y="-51">y&gt;=25</label>
+			<label kind="synchronisation" x="-561" y="0">finish?</label>
+			<label kind="assignment" x="-561" y="-34">y=0</label>
+			<nail x="-535" y="42"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-238" y="51">y&gt;=5</label>
+			<label kind="synchronisation" x="-178" y="51">ready?</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-510" y="-93">y&gt;=25&amp;&amp;!activated</label>
+			<label kind="assignment" x="-484" y="-59">y=0</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-331" y="-110">y&gt;=5&amp;&amp;!activated</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-476" y="-187">y&gt;=20&amp;&amp;!activated</label>
+			<label kind="assignment" x="-314" y="-195">y=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Template0</name>
+		<declaration>clock x;</declaration>
+		<location id="id4" x="76" y="178">
+			<name x="66" y="144">going</name>
+			<label kind="invariant" x="66" y="195">x&lt;=25</label>
+		</location>
+		<location id="id5" x="-314" y="170">
+			<name x="-324" y="136">idle</name>
+		</location>
+		<location id="id6" x="42" y="-144">
+			<name x="32" y="-178">waiting</name>
+			<label kind="invariant" x="32" y="-127">x&lt;=5</label>
+		</location>
+		<location id="id7" x="-323" y="-144">
+			<name x="-333" y="-178">start</name>
+		</location>
+		<init ref="id5"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id7"/>
+			<label kind="assignment" x="-399" y="-51">activated=true</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="guard" x="-170" y="136">x&gt;=25</label>
+			<label kind="synchronisation" x="-85" y="153">finish!</label>
+			<label kind="assignment" x="-187" y="178">activated=false,x=0</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id4"/>
+			<label kind="guard" x="59" y="-17">x&gt;=5</label>
+			<label kind="synchronisation" x="59" y="0">ready!</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="-170" y="-161">enter!</label>
+			<label kind="assignment" x="-229" y="-161">x=0</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+Process = Template();
+Process1 = Template0();
+// List one or more processes to be composed into a system.
+system Process,Process1;
+    </system>
+	<queries>
+	</queries>
+</nta>
